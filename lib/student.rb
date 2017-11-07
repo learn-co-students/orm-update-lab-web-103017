@@ -73,4 +73,16 @@ class Student
     DB[:conn].execute(sql,self.name,self.grade, self.id)
 
   end
+
+  def self.find_or_create_by(name:, grade:)
+    student = DB[:conn].execute("SELECT * FROM students WHERE name = ? AND grade = ?", name, album)
+    if !student.empty?
+      student_data = student[0]
+      student = student.new(student_data[0], student_data[1], student_data[2])
+    else
+      student = self.create(name: name, grade: grade)
+    end
+    student
+  end
+
 end
